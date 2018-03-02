@@ -2,9 +2,7 @@
 
 GMessageBox::GMessageBox(Icone icone, QString titre, QString const& texte, QWidget *parent,
                          RoleBouton bouton1, RoleBouton bouton2, RoleBouton bouton3, RoleBouton bouton4, RoleBouton bouton5)
-    : icon(icone),
-    pixIcon(0),
-    text(""),
+    : text(""),
     choix(0),
     listeBoutons(new QMap<QPushButton*, RoleBouton>),
     layoutHBoutons(0),
@@ -15,12 +13,10 @@ GMessageBox::GMessageBox(Icone icone, QString titre, QString const& texte, QWidg
     barreTitre(0)
 {
     /// Réglages des propriétés
-    setIcon(icone);
     setWindowTitle(titre);
     setText(texte);
     setParent(parent);
     setWindowIcon(parent->windowIcon());
-    setPixmapIcon();
 
     /// Construction du GUI
     barreTitre = new GBarreTitre(QColor(47, 191, 64).rgb(), this);
@@ -30,7 +26,7 @@ GMessageBox::GMessageBox(Icone icone, QString titre, QString const& texte, QWidg
     labelTexte = new QLabel(getText());
 
     labelIcone = new QLabel;
-        labelIcone->setPixmap(pixIcon);
+        setPixmapIcon(icone);
 
     // Construction des layouts
     layoutHTexte = new QHBoxLayout;
@@ -150,57 +146,44 @@ QString GMessageBox::getTextFromEnum(RoleBouton typeBouton)
 
 
 /// **-------**SETs/GETs**-------**
-GMessageBox::Icone GMessageBox::getIcon()
-{
-    return icon;
-}
-
+// Ascenseur pour le texte de la boite de dialogue
 QString GMessageBox::getText()
 {
     return text;
 }
 
-QPixmap GMessageBox::getPixmapIcon()
-{
-    return pixIcon;
-}
-
-void GMessageBox::setIcon(Icone icone)
-{
-    icon = icone;
-}
 void GMessageBox::setText(QString const& texte)
 {
     if (texte != NULL)
-        text = texte;
+        if (!texte.isEmpty())
+            text = texte;
 }
 
-void GMessageBox::setPixmapIcon()
+void GMessageBox::setPixmapIcon(Icone icone)
 {
-    switch (icon)
+    switch (icone)
     {
     case Question:
-        pixIcon = QPixmap("images/000-question.png");
+         labelIcone->setPixmap(QPixmap("images/000-question.png"));
         break;
 
     case Information:
-        pixIcon = QPixmap("images/001-information.png");
+         labelIcone->setPixmap(QPixmap("images/001-information.png"));
         break;
 
     case Avertissement:
-        pixIcon = QPixmap("images/002-warning.png");
+         labelIcone->setPixmap(QPixmap("images/002-warning.png"));
         break;
 
     case Critique:
-        pixIcon = QPixmap("images/003-critical.png");
+         labelIcone->setPixmap(QPixmap("images/003-critical.png"));
         break;
 
     default: //AucuneIcone
-        pixIcon = QPixmap();
+         labelIcone->setPixmap(QPixmap());
+         qDebug("Aucune icone attribuée");
         break;
     }
-
-    labelIcone->setPixmap(pixIcon);
 }
 
 

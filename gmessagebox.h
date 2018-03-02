@@ -29,10 +29,7 @@ public:
     bool addButton(QPushButton *bouton, RoleBouton const role);
     bool removeButton(QPushButton *bouton);
 
-    Icone getIcon();
     QString getText();
-    QPixmap getPixmapIcon();
-
     static QStringList getFilesList();
 
     static int question(QString titre, QString const& texte, QWidget *parent = Q_NULLPTR, RoleBouton bouton1 = Ok, RoleBouton bouton2 = AucunRole, RoleBouton bouton3 = AucunRole, RoleBouton bouton4 = AucunRole, RoleBouton bouton5 = AucunRole);
@@ -46,16 +43,11 @@ public slots:
 protected:
     QString getTextFromEnum(RoleBouton typeBouton);
 
-    void setIcon(Icone icone);
     void setText(QString const& texte);
-    void setPixmapIcon();
-
+    void setPixmapIcon(Icone icone);
 
 protected:
-    Icone icon;
-    QPixmap pixIcon;
     QString text;
-
     QPushButton *choix;
 
     // GUI
