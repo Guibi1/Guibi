@@ -15,6 +15,8 @@ GBarreTitre::GBarreTitre(QRgb couleur, QWidget *parent, TypeBoutonTitre type)
       icon(0),
       labelTitre(0)
 {
+    window()->setWindowFlag(Qt::FramelessWindowHint);
+
     /// Construction du GUI
     // Construit les QToolButtons
     reduceButton = new QToolButton();

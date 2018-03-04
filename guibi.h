@@ -22,6 +22,8 @@ QStringList getFilesList();
 /// -*-*- Code source -*-*-
 bool demmarerApp(QWidget & fenetrePrincipale, QStringList const& listeFichiers, QString const& cheminImageSplash)
 {
+    qFatal("lol");
+
     // Vérification des fichiers requis
     QStringList liste(getFilesList());
             liste.append(listeFichiers);
