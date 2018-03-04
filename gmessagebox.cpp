@@ -19,8 +19,7 @@ GMessageBox::GMessageBox(Icone icone, QString titre, QString const& texte, QWidg
     setWindowIcon(parent->windowIcon());
 
     /// Construction du GUI
-    barreTitre = new GBarreTitre(QColor(47, 191, 64).rgb(), this);
-        barreTitre->setTypeBoutonTitre(GBarreTitre::Fermer);
+    barreTitre = new GBarreTitre(this, GBarreTitre::Fermer);
 
     // Construction des labels
     labelTexte = new QLabel(getText());
@@ -36,7 +35,7 @@ GMessageBox::GMessageBox(Icone icone, QString titre, QString const& texte, QWidg
     layoutHBoutons = new QHBoxLayout;
 
     layoutVFenetre = new QVBoxLayout(this);
-        layoutVFenetre->addWidget(barreTitre, 0);
+        layoutVFenetre->addWidget(barreTitre, 0, Qt::AlignBaseline);
         layoutVFenetre->addLayout(layoutHTexte, 1);
         layoutVFenetre->addLayout(layoutHBoutons, 2);
         layoutVFenetre->setMargin(2);

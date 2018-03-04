@@ -23,24 +23,26 @@ class GBarreTitre : public QFrame
 public:
     enum TypeBoutonTitre{ Tout, Aucun, Fermer, Reduire, Minimiser };
 
+
 private:
     enum SorteBouton{ Close, Reduce, Minimize, Maximize };
 
 
 public:
-    explicit GBarreTitre(QRgb couleur = QRgb(), QWidget *parent = Q_NULLPTR, TypeBoutonTitre type = Tout);
+    explicit GBarreTitre(QWidget *parent = Q_NULLPTR, TypeBoutonTitre type = Tout);
     void setTypeBoutonTitre(TypeBoutonTitre type);
-
 
     static QStringList getFilesList();
 
+
 private:
-    QPixmap getColoredPixmap(SorteBouton bouton);
+    QPixmap getPixmap(SorteBouton bouton);
 
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     bool eventFilter(QObject *watched, QEvent *event);
+
 
 private slots:
     void reduceButtonClicked();
@@ -54,13 +56,14 @@ private slots:
     void iconChanged();
     void windowViewChanged();
 
+
 signals:
     void iconPressed();
     void willSoonExit();
 
+
 private:
     TypeBoutonTitre typeBouton;
-    QRgb couleurBoutons;
 
     // Déplacement de la fenêtre
     QPoint pointDifference;

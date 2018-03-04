@@ -1,10 +1,9 @@
 #include "gbarretitre.h"
 
 
-GBarreTitre::GBarreTitre(QRgb couleur, QWidget *parent, TypeBoutonTitre type)
-    : QFrame(parent, Qt::FramelessWindowHint),
+GBarreTitre::GBarreTitre(QWidget *parent, TypeBoutonTitre type)
+    : QFrame(parent),
       typeBouton(),
-      couleurBoutons(couleur),
       pointDifference(),
       correct(true),
       layoutHPrincipal(0),
@@ -21,7 +20,7 @@ GBarreTitre::GBarreTitre(QRgb couleur, QWidget *parent, TypeBoutonTitre type)
     // Construit les QToolButtons
     reduceButton = new QToolButton();
         reduceButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        reduceButton->setIcon(QIcon(getColoredPixmap(Reduce)));
+        reduceButton->setIcon(QIcon(getPixmap(Reduce)));
 
     sizeButton = new QToolButton();
         sizeButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -29,14 +28,14 @@ GBarreTitre::GBarreTitre(QRgb couleur, QWidget *parent, TypeBoutonTitre type)
 
     closeButton = new QToolButton();
         closeButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        closeButton->setIcon(QIcon(getColoredPixmap(Close)));
+        closeButton->setIcon(QIcon(getPixmap(Close)));
 
     icon = new QToolButton();
         icon->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         iconChanged();
 
     labelTitre = new QLabel("<b>" + window()->windowTitle() + "</b>");
-        labelTitre->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        labelTitre->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Ignored);
         labelTitre->setTextFormat(Qt::RichText);
         labelTitre->installEventFilter(this);
 
@@ -44,17 +43,17 @@ GBarreTitre::GBarreTitre(QRgb couleur, QWidget *parent, TypeBoutonTitre type)
     layoutHBoutons = new QHBoxLayout();
         layoutHBoutons->setMargin(0);
         layoutHBoutons->setSpacing(0);
-        layoutHBoutons->addWidget(reduceButton, 0, Qt::AlignBaseline);
-        layoutHBoutons->addWidget(sizeButton, 1, Qt::AlignBaseline);
-        layoutHBoutons->addWidget(closeButton, 2, Qt::AlignBaseline);
+        layoutHBoutons->addWidget(reduceButton, 0, Qt::AlignCenter);
+        layoutHBoutons->addWidget(sizeButton, 1, Qt::AlignCenter);
+        layoutHBoutons->addWidget(closeButton, 2, Qt::AlignCenter);
 
     layoutHPrincipal = new QHBoxLayout(this);
         layoutHPrincipal->setMargin(0);
         layoutHPrincipal->setSpacing(10);
-        layoutHPrincipal->addWidget(icon, 0, Qt::AlignBaseline);
+        layoutHPrincipal->addWidget(icon, 0, Qt::AlignCenter);
         layoutHPrincipal->addSpacing(10);
-        layoutHPrincipal->addWidget(labelTitre, 1, Qt::AlignBaseline);
-        layoutHPrincipal->addLayout(layoutHBoutons, 2);
+        layoutHPrincipal->addWidget(labelTitre, 2, Qt::AlignJustify);
+        layoutHPrincipal->addLayout(layoutHBoutons, 3);
 
     /// Connects
     // Avec "window"
@@ -120,36 +119,30 @@ void GBarreTitre::setTypeBoutonTitre(GBarreTitre::TypeBoutonTitre type)
     }
 }
 
-QPixmap GBarreTitre::getColoredPixmap(SorteBouton bouton)
+QPixmap GBarreTitre::getPixmap(SorteBouton bouton)
 {
-    QImage image;
-
     switch (bouton)
     {
     case Close:
-        image = QImage("images/005-close.png");
+        return QPixmap("images/005-close.png");
         break;
 
     case Reduce:
-        image = QImage("images/006-Reduce.png");
+        return QPixmap("images/006-Reduce.png");
         break;
 
     case Maximize:
-        image = QImage("images/007-maximize.png");
+        return QPixmap("images/007-maximize.png");
         break;
 
     case Minimize:
-        image = QImage("images/008-minimize.png");
+        return QPixmap("images/008-minimize.png");
         break;
 
     default:
-        image = QImage();
+        return QPixmap();
         break;
     }
-
-    image.setColorTable(QVector<QRgb>(1, couleurBoutons));
-
-    return QPixmap::fromImage(image);
 }
 
 void GBarreTitre::mousePressEvent(QMouseEvent *event)
@@ -259,10 +252,10 @@ void GBarreTitre::iconChanged()
 void GBarreTitre::windowViewChanged()
 {
     if (window()->isMaximized())
-        sizeButton->setIcon(QIcon(getColoredPixmap(Minimize)));
+        sizeButton->setIcon(QIcon(getPixmap(Minimize)));
 
     else
-        sizeButton->setIcon(QIcon(getColoredPixmap(Maximize)));
+        sizeButton->setIcon(QIcon(getPixmap(Maximize)));
 }
 
 
