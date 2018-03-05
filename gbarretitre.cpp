@@ -15,6 +15,7 @@ GBarreTitre::GBarreTitre(QWidget *parent, TypeBoutonTitre type)
       labelTitre(0)
 {
     window()->setWindowFlag(Qt::FramelessWindowHint);
+    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
 
     /// Construction du GUI
     // Construit les QToolButtons
@@ -35,25 +36,25 @@ GBarreTitre::GBarreTitre(QWidget *parent, TypeBoutonTitre type)
         iconChanged();
 
     labelTitre = new QLabel("<b>" + window()->windowTitle() + "</b>");
-        labelTitre->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Ignored);
+        labelTitre->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
         labelTitre->setTextFormat(Qt::RichText);
         labelTitre->installEventFilter(this);
 
     // Construit les layouts
-    layoutHBoutons = new QHBoxLayout();
+    layoutHBoutons = new QHBoxLayout;
         layoutHBoutons->setMargin(0);
         layoutHBoutons->setSpacing(0);
-        layoutHBoutons->addWidget(reduceButton, 0, Qt::AlignCenter);
-        layoutHBoutons->addWidget(sizeButton, 1, Qt::AlignCenter);
-        layoutHBoutons->addWidget(closeButton, 2, Qt::AlignCenter);
+        layoutHBoutons->addWidget(reduceButton, 0, Qt::AlignBaseline);
+        layoutHBoutons->addWidget(sizeButton, 0, Qt::AlignBaseline);
+        layoutHBoutons->addWidget(closeButton, 0, Qt::AlignBaseline);
 
     layoutHPrincipal = new QHBoxLayout(this);
         layoutHPrincipal->setMargin(0);
         layoutHPrincipal->setSpacing(10);
-        layoutHPrincipal->addWidget(icon, 0, Qt::AlignCenter);
+        layoutHPrincipal->addWidget(icon, 0, Qt::AlignBaseline);
         layoutHPrincipal->addSpacing(10);
-        layoutHPrincipal->addWidget(labelTitre, 2, Qt::AlignJustify);
-        layoutHPrincipal->addLayout(layoutHBoutons, 3);
+        layoutHPrincipal->addWidget(labelTitre, 0, Qt::AlignBaseline);
+        layoutHPrincipal->addLayout(layoutHBoutons);
 
     /// Connects
     // Avec "window"

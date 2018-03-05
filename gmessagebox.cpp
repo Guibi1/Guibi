@@ -8,6 +8,7 @@ GMessageBox::GMessageBox(Icone icone, QString titre, QString const& texte, QWidg
     layoutHBoutons(0),
     layoutHTexte(0),
     layoutVFenetre(0),
+    spacerBoutons(new QSpacerItem(10, 1, QSizePolicy::MinimumExpanding, QSizePolicy::Maximum)),
     labelTexte(0),
     labelIcone(0),
     barreTitre(0)
@@ -17,28 +18,34 @@ GMessageBox::GMessageBox(Icone icone, QString titre, QString const& texte, QWidg
     setText(texte);
     setParent(parent);
     setWindowIcon(parent->windowIcon());
+    setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+
 
     /// Construction du GUI
+    setSizeGripEnabled(false);
     barreTitre = new GBarreTitre(this, GBarreTitre::Fermer);
 
     // Construction des labels
     labelTexte = new QLabel(getText());
+        setSizePolicy(QSizePolicy::Maximum, QSizePolicy::MinimumExpanding);
 
     labelIcone = new QLabel;
         setPixmapIcon(icone);
 
     // Construction des layouts
+    layoutHBoutons = new QHBoxLayout;
+        layoutHBoutons->addSpacerItem(new QSpacerItem(10, 1, QSizePolicy::MinimumExpanding, QSizePolicy::Maximum));
+        layoutHBoutons->addSpacerItem(spacerBoutons);
+
     layoutHTexte = new QHBoxLayout;
         layoutHTexte->addWidget(labelIcone, 0, Qt::AlignCenter);
-        layoutHTexte->addWidget(labelTexte, 1, Qt::AlignTop);
-
-    layoutHBoutons = new QHBoxLayout;
+        layoutHTexte->addWidget(labelTexte, 0, Qt::AlignCenter);
 
     layoutVFenetre = new QVBoxLayout(this);
-        layoutVFenetre->addWidget(barreTitre, 0, Qt::AlignBaseline);
-        layoutVFenetre->addLayout(layoutHTexte, 1);
-        layoutVFenetre->addLayout(layoutHBoutons, 2);
-        layoutVFenetre->setMargin(2);
+        layoutVFenetre->setContentsMargins(11, 0, 11, 11);
+        layoutVFenetre->addWidget(barreTitre, 0, Qt::AlignTop);
+        layoutVFenetre->addLayout(layoutHTexte);
+        layoutVFenetre->addLayout(layoutHBoutons);
 
     // Construction des boutons
     QList<RoleBouton> listeRoleBoutonsAjouter;
@@ -55,10 +62,12 @@ GMessageBox::GMessageBox(Icone icone, QString titre, QString const& texte, QWidg
 
 bool GMessageBox::addButton(QPushButton *bouton, RoleBouton const role)
 {
-    if (listeBoutons->contains(bouton))
+    if (!listeBoutons->contains(bouton))
     {
         listeBoutons->insert(bouton, role);
-        layoutHBoutons->addWidget(bouton);
+        layoutHBoutons->removeItem(spacerBoutons);
+        layoutHBoutons->addWidget(bouton, 0, Qt::AlignCenter);
+        layoutHBoutons->addSpacerItem(spacerBoutons);
         connect(bouton, SIGNAL(clicked(bool)), this, SLOT(boutonCliquer()));
         return true;
     }
@@ -68,7 +77,7 @@ bool GMessageBox::addButton(QPushButton *bouton, RoleBouton const role)
 
 bool GMessageBox::removeButton(QPushButton *bouton)
 {
-    if (listeBoutons->remove(bouton) != 0)
+    if (listeBoutons->remove(bouton) > 0)
     {
         layoutHBoutons->removeWidget(bouton);
         return true;
