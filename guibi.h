@@ -14,18 +14,19 @@
 
 
 /// -*-*- Déclarations -*-*-
-bool demmarerApp(QWidget & fenetrePrincipale, QStringList const& listeFichiers, QString const& cheminImageSplash);
+bool demmarerApp(QWidget & fenetrePrincipale, QStringList const& listeFichiers, bool splash, QString const& cheminImageSplash = QString());
 bool verifierFichiers(QStringList const& listeFichier);
 QStringList getFilesList();
 
 
 /// -*-*- Code source -*-*-
-bool demmarerApp(QWidget & fenetrePrincipale, QStringList const& listeFichiers, QString const& cheminImageSplash)
+bool demmarerApp(QWidget & fenetrePrincipale, QStringList const& listeFichiers, bool splash, QString const& cheminImageSplash)
 {
     // Vérification des fichiers requis
-    QStringList liste(getFilesList());
-            liste.append(listeFichiers);
-            liste.append(cheminImageSplash);
+    QStringList liste(getFilesList() + listeFichiers);
+
+    if (splash)
+        liste.append(cheminImageSplash);
 
     if (!verifierFichiers(liste))
         return false;
@@ -33,9 +34,13 @@ bool demmarerApp(QWidget & fenetrePrincipale, QStringList const& listeFichiers, 
 
     // On configure le splash screen
     QPixmap pixSplash(cheminImageSplash);
-    QSplashScreen splash(pixSplash);
-    splash.showMessage(QObject::tr("Verrouillage des fichier..."), Qt::AlignBottom & Qt::AlignHCenter, Qt::white);
-    splash.show();
+    QSplashScreen splashScreen(pixSplash);
+
+    if (splash)
+    {
+        splashScreen.showMessage(QObject::tr("Verrouillage des fichier..."), Qt::AlignBottom & Qt::AlignHCenter, Qt::white);
+        splashScreen.show();
+    }
 
 
     // Vérification d'une potentielle deuxième instance
@@ -47,9 +52,13 @@ bool demmarerApp(QWidget & fenetrePrincipale, QStringList const& listeFichiers, 
 
 
     // On démarre l'application au complet
-    splash.showMessage(QObject::tr("Démarrage de l'application..."), Qt::AlignBottom | Qt::AlignHCenter, Qt::white);
+    if (splash)
+        splashScreen.showMessage(QObject::tr("Démarrage de l'application..."), Qt::AlignBottom | Qt::AlignHCenter, Qt::white);
+
     fenetrePrincipale.show();
-    splash.close();
+
+    if (splash)
+        splashScreen.close();
 
     return true;
 }

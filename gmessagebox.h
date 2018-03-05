@@ -9,6 +9,8 @@
 #include <QPixmap>
 #include <QMap>
 #include <QStringList>
+#include <QDesktopWidget>
+#include <QStyle>
 
 #include "guibi_global.h"
 #include "gbarretitre.h"
@@ -56,6 +58,8 @@ protected:
     QHBoxLayout *layoutHBoutons;
     QHBoxLayout *layoutHTexte;
     QVBoxLayout *layoutVFenetre;
+
+    QSpacerItem *spacerBoutons;
 
     QLabel *labelTexte;
     QLabel *labelIcone;
