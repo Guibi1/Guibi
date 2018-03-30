@@ -3,7 +3,7 @@
 
 GBarreTitre::GBarreTitre(QWidget *parent, TypeBoutonTitre type)
     : QFrame(parent),
-      typeBouton(),
+      typeBouton(TypeBoutonTitre::Tout),
       pointDifference(),
       correct(true),
       layoutHPrincipal(0),
@@ -14,7 +14,7 @@ GBarreTitre::GBarreTitre(QWidget *parent, TypeBoutonTitre type)
       icon(0),
       labelTitre(0)
 {
-    window()->setWindowFlag(Qt::FramelessWindowHint);
+    parentWidget()->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
 
     /// Construction du GUI
@@ -172,7 +172,7 @@ void GBarreTitre::mouseMoveEvent(QMouseEvent *event)
         {
             QPoint p(event->globalX(), event->globalY());
 
-            window()->move(p - (pointDifference + QPoint(window()->layout()->margin(), window()->layout()->margin())));
+            window()->move(p - (pointDifference + QPoint(parentWidget()->layout()->contentsMargins().left(), parentWidget()->layout()->contentsMargins().top())));
         }
 
         else
